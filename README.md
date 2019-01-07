@@ -1,10 +1,16 @@
 # Deep Reinforcement Learning Practice with Google Colab
 
 ## Day 1
-- 
-  - Trust region policy optimization [[Schulman et al. ICML 2015]](http://proceedings.mlr.press/v37/schulman15.pdf)
-## Day 2
-- DQN (?)
+- 실습 교육 내용:
+    - DQN
+- 실습 내용 (또는 숙):
+    1. Prioritized Experience Replay (DQN+) [[Schaul et al. ICLR 2016]](https://arxiv.org/pdf/1511.05952.pdf)
+    2. Dueling
+network architectures for deep reinforcement learning (DQN++) [[Wang et al. ICML 2016]](http://proceedings.mlr.press/v48/wangf16.pdf)
+
+## Day 2제
+- 실습 교육 내용:
+  - Trust region policy optimization (TRPO) [[Schulman et al. ICML 2015]](http://proceedings.mlr.press/v37/sch제ulman15.pdf)
 ## Day 3
 - MAML
 
@@ -18,8 +24,11 @@
 5. ~~env observation normalization function 수정 (거의 모든 알고리즘에 적용되기 때문에 수정해야 함)~~ (교수님 rllab파일 사용)
 (baselines, rllab trpo가 같은 성능을 보이게)
 6. ~~gym environment에 video recording=True옵션 줘서 mp4 저장하는 것 시도해볼 것~~
+7. DQN+, DQN++, MAML 코드 돌려보고 colab에 추가
+    - DQN, DQN+, DQN++  비교 결과: https://arxiv.org/pdf/1710.02298.pdf
+    - DQN+, DQN++ 언급한 논문: https://arxiv.org/pdf/1604.00289.pdf
 
-        - 현재 최종 결과물: https://colab.research.google.com/drive/1Pfhane7wLW7jr2jyqhuGk65ZShuYNEyD#scrollTo=_KwYCkcKiV2N
+        - 현재 최종 결과물. TRPO GPU 돌리고, env rendering, average return plot 까지 했음. (별도의 cudnn 설치 없이 잘 돌아감.): https://colab.research.google.com/drive/1Pfhane7wLW7jr2jyqhuGk65ZShuYNEyD#scrollTo=_KwYCkcKiV2N
     
     
     
