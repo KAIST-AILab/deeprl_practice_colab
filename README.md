@@ -11,9 +11,7 @@
 
 ## Preparation Progress
 0. ~~Colab에서 anaconda env로 rllab 실행하는걸 마무리~~. ~~Anaconda 안 쓰고, CUDNN을 따로 깔아서 GPU로 rllab 코드를 돌릴 수 있 colab ipython notebook도 따로 만듬~~.
-1. ~~learned parameter 저장 옵션 어떻게 주는지 (trpo_cartpole.py, trpo_swimmer.py)~~
-2. ~~average return 어떻게 저장하는지 (trpo_cartpole.py, trpo_swimmer.py)~~
-
+1. ~~learned parameter, average return 저장 옵션 어떻게 주는지 확인~~ (trpo_cartpole.py, trpo_swimmer.py)
 3. ~~iteration  별로 average return plot (pyplot)  (trpo_cartpole.py, trpo_swimmer.py)~~
 4. code 블록 의미 있게 나눠서 따로 실행 가능하게 colab에 써보기
 colab에 rendering하는 건 교수님 다음 colab에 대한 지시가 있을 때까지 대기
@@ -44,7 +42,7 @@ colab에 rendering하는 건 교수님 다음 colab에 대한 지시가 있을 �
     에서 죽는것 같습니다.
         - 수정된 파일 https://colab.research.google.com/drive/1Pfhane7wLW7jr2jyqhuGk65ZShuYNEyD#scrollTo=_KwYCkcKiV2N
     
-        -  pip install box2d-py mako==1.0.7 Pygame  인스톨파일에 추
+        -  pip install box2d-py mako==1.0.7 Pygame  인스톨파일에 추가
     
     
     
