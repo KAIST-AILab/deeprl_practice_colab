@@ -12,13 +12,13 @@
 ## Preparation Progress
 0. ~~Colab에서 anaconda env로 rllab 실행하는걸 마무리~~. ~~Anaconda 안 쓰고, CUDNN을 따로 깔아서 GPU로 rllab 코드를 돌릴 수 있 colab ipython notebook도 따로 만듬~~.
 1. ~~learned parameter, average return 저장 옵션 어떻게 주는지 확인~~ (trpo_cartpole.py, trpo_swimmer.py)
-3. ~~iteration  별로 average return plot (pyplot)  (trpo_cartpole.py, trpo_swimmer.py)~~
-4. code 블록 의미 있게 나눠서 따로 실행 가능하게 colab에 써보기
+2. ~~iteration  별로 average return plot (pyplot)  (trpo_cartpole.py, trpo_swimmer.py)~~
+3. code 블록 의미 있게 나눠서 따로 실행 가능하게 colab에 써보기
 colab에 rendering하는 건 교수님 다음 colab에 대한 지시가 있을 때까지 대기
-5. distral, maml 분석. rllab 사용 가능한지 보기.. (내 기억에는 maml rllab으로 구현됐던거 같음)
-6. env observation normalization function 수정 (거의 모든 알고리즘에 적용되기 때문에 수정해야 함)
+4. distral, maml 분석. rllab 사용 가능한지 보기.. (내 기억에는 maml rllab으로 구현됐던거 같음)
+5. env observation normalization function 수정 (거의 모든 알고리즘에 적용되기 때문에 수정해야 함)
 (baselines, rllab trpo가 같은 성능을 보이게)
-7. ~~gym environment에 video recording=True옵션 줘서 mp4 저장하는 것 시도해볼 것~~
+6. ~~gym environment에 video recording=True옵션 줘서 mp4 저장하는 것 시도해볼 것~~
     - 내 개인적인 생각: rllab코드 내부에 mp4를 저장하는 코드가 있는데 (저장경로:/rllab/data/local/experiment/experiment_data_.../gym_log/openaigym.episode...) 는이를 활용할 수 있으면 의외로 쉽게 끝날 수도
         - 교수님께서 보신 봐로는 colab에지서 충분히 랜더가 된다고 하심... 다른 사람들이 올린 블로그에 나온다고 함
         - Policy parameters saved by logger in batch_polopt.py
