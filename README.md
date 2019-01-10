@@ -21,6 +21,38 @@ network architectures for deep reinforcement learning (DQN++) [[Wang et al. ICML
     -  Tensorflow로 구현된 MAML을 Theano로 구현.
 
 
+## Mujoco Installation
+```bash
+# Files required for your installation should be located at .../rllab/vendor/mujoco
+# File names: libglfw.so.3, libmujoco131.so, mjkey.txt, mjpro131_linux.zip
+# Except the lisence key (mjkey.txt), it is all included in our repository
+# Place your lisence key in .../rllab/vendor/mujoco
+# And follow the installation guide below
+
+$ cd .../rllab/scripts
+$ rllab/scripts $ ./setup_mujoco.sh 
+# Enter the path to mjpro131_linux.zip which is: ../vendor/mujoco/mjpro131_linux.zip
+# Enter the path to the lisence key which is: ../vendor/mujoco/mjkey.txt
+
+# Test if Mujoco is installed in a correct way:
+$ cd .../rllab/examples 
+.../rllab/examples $ cp trpo_swimmer.py ../trpo_swimmer.py
+.../rllab/examples $ cd ..
+.../rllab $
+
+# change the default of one of the inputs of the rollout() method named "animated" to True 
+# open .../rllab/rllab/sampler/utils.py
+# change the default value of the input here and save
+
+# Run the example code that trains TRPO agent in the Swimmer environment of Mujoco
+# You should see the animation of the agent moving around (Its early training stage, so it wouldn't move much)
+.../rllab $ python trpo_swimmer.py  
+
+
+```
+
+
+
 ## Preparation Progress
 0. ~~Colab에서 anaconda env로 rllab 실행하는걸 마무리~~. ~~Anaconda 안 쓰고, CUDNN을 따로 깔아서 GPU로 rllab 코드를 돌릴 수 있 colab ipython notebook도 따로 만듬~~.
 1. ~~learned parameter, average return 저장 옵션 어떻게 주는지 확인~~ (trpo_cartpole.py, trpo_swimmer.py)

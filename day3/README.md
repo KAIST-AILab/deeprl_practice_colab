@@ -5,6 +5,3 @@ Model-Agnostic Meta-Learning (MAML) [[Finn et al. ICML 2017]](http://proceedings
 ### Environments
 1. Classical Control: Cartpole
 2. Mujoco Environment: Swimmer
-
-
-,
