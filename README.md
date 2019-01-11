@@ -363,3 +363,56 @@ dependencies:
   - werkzeug==0.14.1
 ```
 
+### DDPG fix
+- algos/ddpg.py requires fixing by adding the 2nd to the last line of the code shown below
+```bash
+        for epoch in range(self.n_epochs):
+            logger.push_prefix('epoch #%d | ' % epoch)
+            logger.log("Training started")
+            observation=self.env.reset()
+            for epoch_itr in pyprind.prog_bar(range(self.epoch_length)):
+```
+
+### 1일차 교육자료 내용
+1. DQN
+2. DQN+
+3. DQN++
+### 2일차 교육자료 내용
+1. REINFORCE (VPG에서 baseline이 zero_baselines일 때 REINFORCE 되는 것을 보임)
+    - https://media.readthedocs.org/pdf/rllab/master/rllab.pdf
+    - Batchpolopt
+        - rllab에서 batch transition 정보를 사용하는 policy gradient 알고리즘의 기본 틀.
+            - BatchSampler class를 사용
+            - 여러개의 environment instance들에서 batch sample하기 위해 여러개의 worker를 돌리는데 필요한 method들을 사용
+            - train method 내에 optimize_policy method를 사용하는 것을 볼 수 있음
+            - TRPO, PPO 같이 gae lambda를 사용하는 알고리즘들을 위해 gae lambda 사용 여부를 나타내는 멤버 변수 gae_lambda가 있음.
+                - GAE lambda 설명
+    - REINFORCE 구현 (미구현...)
+        - batchpolopt 사용
+        - 알고리즘 간략 설명: value를 학습하지 않고, policy parameter만 학습하는 알고리
+        - 코드 설명즘
+        - 구멍 뚫은 부분 구현
+2. Vanilla policy gradient
+    - Applies optimizer to 
+    - Optimizer: rllab/optimizers/first_order_optimizer (stochastic gradient descent)
+        - optimized loss(named: surr_obj):surr_obj = - TT.mean(logli * advantage_var)
+        - surr_obj gradient w.r.t. policy -> used to update policy
+        - f_kl is just used for monitoring (written on log file maybe?)
+    - optimize_policy() method에서 (batch_polot optimize_policy method overridden) 
+        ```python 
+        agent_infos = samples_data["agent_infos"]
+        ```
+        위 코드로 observation(obs), action, advantage정보 받아옴.
+        - batch_polopt의 train() method에서
+            - samples_data = self.sampler.process_samples(itr, paths)
+            - samples_data에 있는 action, advantage, obs는 base sampler에서 만들어진 것.
+            - rllab/sampler/base.py에서 (BaseSampler에서) gae 람다로 advantage 계산: 
+            ```python
+            path["advantages"] = special.discount_cumsum(
+            deltas, self.algo.discount * self.algo.gae_lambda)
+            ```
+            - BatchPolopt class의 gae_lambda 멤버변수 default initial 값이 1. 0 이면 gae lambda 안 쓰는 것을 보임
+            - rllab/baseline dir에 advantage estimation을 위한 네트웍들이 있음. rllab/sampler/base.py에서 이 모델들을 fit하고   advantage계산하는데에 사용 (zero_baseline.py는 왜 있는지 모르겠음... 설마 이거 쓰면 value안배우는건가 했는데 그런건 아닌것 같고. 그리고 왜 baseline이라고 하는걸까)
+            - GAE lambda : https://danieltakeshi.github.io/2017/04/02/notes-on-the-generalized-advantage-estimation-paper/
+            - 
+            
