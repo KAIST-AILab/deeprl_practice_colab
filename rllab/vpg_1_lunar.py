@@ -17,7 +17,7 @@ N = 100
 # Each trajectory will have at most 100 time steps
 T = 100
 # Number of iterations
-n_itr = 100
+n_itr = 1000
 # Set the discount factor for the problem
 discount = 0.99
 # Learning rate for the gradient update

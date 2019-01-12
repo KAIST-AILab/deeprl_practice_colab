@@ -399,40 +399,40 @@ class DDPG(RLAlgorithm):
             self.qf.get_param_values(regularizable=True)
         )
 
-        logger.record_tabular('transitions', epoch)
+        logger.record_tabular('transitions', epoch) ######
         logger.record_tabular('AverageReturn',
-                              np.mean(returns))
+                              np.mean(returns)) #####
         logger.record_tabular('StdReturn',
-                              np.std(returns))
+                              np.std(returns)) ####
         logger.record_tabular('MaxReturn',
-                              np.max(returns))
+                              np.max(returns)) ####
         logger.record_tabular('MinReturn',
-                              np.min(returns))
-        if len(self.es_path_returns) > 0:
-            logger.record_tabular('AverageEsReturn',
-                                  np.mean(self.es_path_returns))
-            logger.record_tabular('StdEsReturn',
-                                  np.std(self.es_path_returns))
-            logger.record_tabular('MaxEsReturn',
-                                  np.max(self.es_path_returns))
-            logger.record_tabular('MinEsReturn',
-                                  np.min(self.es_path_returns))
+                              np.min(returns))  ####
+        # if len(self.es_path_returns) > 0:
+        #     logger.record_tabular('AverageEsReturn',
+        #                           np.mean(self.es_path_returns))
+        #     logger.record_tabular('StdEsReturn',
+        #                           np.std(self.es_path_returns))
+        #     logger.record_tabular('MaxEsReturn',
+        #                           np.max(self.es_path_returns))
+        #     logger.record_tabular('MinEsReturn',
+        #                           np.min(self.es_path_returns))
         logger.record_tabular('AverageDiscountedReturn',
-                              average_discounted_return)
-        logger.record_tabular('AverageQLoss', average_q_loss)
-        logger.record_tabular('AveragePolicySurr', average_policy_surr)
-        logger.record_tabular('AverageQ', np.mean(all_qs))
-        logger.record_tabular('AverageAbsQ', np.mean(np.abs(all_qs)))
-        logger.record_tabular('AverageY', np.mean(all_ys))
-        logger.record_tabular('AverageAbsY', np.mean(np.abs(all_ys)))
+                              average_discounted_return) ##########
+        logger.record_tabular('AverageQLoss', average_q_loss)     ######3
+        logger.record_tabular('AveragePolicySurr', average_policy_surr) ###########
+        logger.record_tabular('AverageQ', np.mean(all_qs)) ###########
+        logger.record_tabular('AverageAbsQ', np.mean(np.abs(all_qs))) ##########3
+        logger.record_tabular('AverageY', np.mean(all_ys)) #############3
+        logger.record_tabular('AverageAbsY', np.mean(np.abs(all_ys))) ###########
         logger.record_tabular('AverageAbsQYDiff',
-                              np.mean(np.abs(all_qs - all_ys)))
-        logger.record_tabular('AverageAction', average_action)
+                              np.mean(np.abs(all_qs - all_ys))) ###########33
+        logger.record_tabular('AverageAction', average_action) ###########3
 
         logger.record_tabular('PolicyRegParamNorm',
-                              policy_reg_param_norm)
+                              policy_reg_param_norm) ###########33
         logger.record_tabular('QFunRegParamNorm',
-                              qfun_reg_param_norm)
+                              qfun_reg_param_norm) ###########3
 
         self.env.log_diagnostics(paths)
         self.policy.log_diagnostics(paths)
