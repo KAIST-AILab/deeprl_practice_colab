@@ -212,9 +212,11 @@ class DDPG(RLAlgorithm):
         for epoch in range(self.n_epochs):
             logger.push_prefix('epoch #%d | ' % epoch)
             logger.log("Training started")
+            observation = self.env.reset()
+            sample_policy.reset()
             for epoch_itr in pyprind.prog_bar(range(self.epoch_length)):
                 # Execute policy
-                if terminal:  # or path_length > self.max_path_length:
+                if terminal :  # or path_length > self.max_path_length:
                     # Note that if the last time step ends an episode, the very
                     # last state and observation will be ignored and not added
                     # to the replay pool
@@ -224,6 +226,7 @@ class DDPG(RLAlgorithm):
                     self.es_path_returns.append(path_return)
                     path_length = 0
                     path_return = 0
+                print(observation)
                 action = self.es.get_action(itr, observation, policy=sample_policy)  # qf=qf)
 
                 next_observation, reward, terminal, _ = self.env.step(action)

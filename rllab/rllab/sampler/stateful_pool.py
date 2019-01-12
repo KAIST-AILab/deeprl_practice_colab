@@ -56,7 +56,7 @@ class StatefulPool(object):
         if n_parallel > 1:
             self.queue = mp.Queue()
             self.worker_queue = mp.Queue()
-            self.pool = MemmappingPool(
+            self.pool = MemmapingPool(
                 self.n_parallel,
                 temp_folder="/tmp",
             )

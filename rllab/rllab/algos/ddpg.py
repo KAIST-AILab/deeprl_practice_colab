@@ -205,19 +205,22 @@ class DDPG(RLAlgorithm):
         path_length = 0
         path_return = 0
         terminal = False
-        observation = self.env.reset()
+        # observation = self.env.reset()
 
         sample_policy = pickle.loads(pickle.dumps(self.policy))
+        print("Train start!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         for epoch in range(self.n_epochs):
             logger.push_prefix('epoch #%d | ' % epoch)
             logger.log("Training started")
+            observation=self.env.reset()
             for epoch_itr in pyprind.prog_bar(range(self.epoch_length)):
                 # Execute policy
                 if terminal:  # or path_length > self.max_path_length:
                     # Note that if the last time step ends an episode, the very
                     # last state and observation will be ignored and not added
                     # to the replay pool
+                    print("Env reset!!!!!!!!!!!!!!!!!!!")
                     observation = self.env.reset()
                     self.es.reset()
                     sample_policy.reset()
@@ -226,10 +229,16 @@ class DDPG(RLAlgorithm):
                     path_return = 0
                 action = self.es.get_action(itr, observation, policy=sample_policy)  # qf=qf)
 
+                print("terminal: ", terminal)
+
                 next_observation, reward, terminal, _ = self.env.step(action)
+                print(action)
+                print(reward)
+                print("env.step terminal: ", terminal)
                 path_length += 1
                 path_return += reward
-
+                print(path_length)
+                print(self.max_path_length)
                 if not terminal and path_length >= self.max_path_length:
                     terminal = True
                     # only include the terminal transition in this case if the flag was set

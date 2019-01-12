@@ -11,14 +11,20 @@ network architectures for deep reinforcement learning (DQN++) [[Wang et al. ICML
 ## Day 2: Policy-Based RL
 - 실습 교육 내용:
     - Trust region policy optimization (TRPO) [[Schulman et al. ICML 2015]](http://proceedings.mlr.press/v37/sch제ulman15.pdf)
+    
+    - REINFORCE, DDPG
 - 실습 내용 (못하면 숙제):
     - Proximal Policy Optimization (PPO) [[Schulman et al. Arxiv 2017]](https://arxiv.org/pdf/1707.06347.pdf)
+    
+    -REINFORCE (직접 코딩-구멍뚫고 문제 만들기 좋음), DDPG(있는 코드 활용, OU/Gaussian exploration strategy 바꿔가면서 실험 &구멍뚫고 문제 만들기)할까 생각중
      
 ## Day 3: Transfer Learning
 - 실습 교육 내용:
     - Model-Agnostic Meta-Learning (MAML) [[Finn et al. ICML 2017]](https://arxiv.org/pdf/1703.03400.pdf)
 - 실습 내용 (못하면 숙제):
     -  Tensorflow로 구현된 MAML을 Theano로 구현.
+    
+    -MAML은  RL algorithm이라기 보다는 gradient-based optimization을 사용하는 모델들에서의 transfer learning algorithm이라고 보는 것이 맞음... GAIL 실습하는게 더 나아 보임...저자코드 사용해서. 구멍 뚫고 문제 만들 곳이 reward학습하는 곳과, policy 학습하는 곳. 학습하는데 시간이 좀 걸릴 것으로 보임.
 
 
 ## Mujoco Local Installation
@@ -51,7 +57,8 @@ $ cd .../rllab/examples
 
 ```
 
-
+## OpenAI gym leaderboard
+https://github.com/openai/gym/wiki/Leaderboard
 
 ## Preparation Progress
 0. ~~Colab에서 anaconda env로 rllab 실행하는걸 마무리~~. ~~Anaconda 안 쓰고, CUDNN을 따로 깔아서 GPU로 rllab 코드를 돌릴 수 있 colab ipython notebook도 따로 만듬~~.
@@ -416,3 +423,7 @@ dependencies:
             - GAE lambda : https://danieltakeshi.github.io/2017/04/02/notes-on-the-generalized-advantage-estimation-paper/
             - 
             
+           
+
+ 
+ 
