@@ -93,18 +93,18 @@ class DDPG(RLAlgorithm):
             qf,
             es,
             batch_size=32,
-            n_epochs=200,
-            epoch_length=1000,
+            n_steps=8000000,
             min_pool_size=10000,
             replay_pool_size=1000000,
             discount=0.99,
             max_path_length=250,
+            train_epoch_interval=10000,
             qf_weight_decay=0.,
             qf_update_method='adam',
             qf_learning_rate=1e-3,
             policy_weight_decay=0,
             policy_update_method='adam',
-            policy_learning_rate=1e-4,
+            policy_learning_rate=1e-3,
             eval_samples=10000,
             soft_target=True,
             soft_target_tau=0.001,
@@ -119,7 +119,7 @@ class DDPG(RLAlgorithm):
         :param qf: Q function
         :param es: Exploration strategy
         :param batch_size: Number of samples for each minibatch.
-        :param n_epochs: Number of epochs. Policy will be evaluated after each epoch.
+        :param n_steps: Number of steps used in training
         :param epoch_length: How many timesteps for each epoch.
         :param min_pool_size: Minimum size of the pool to start training.
         :param replay_pool_size: Size of the experience replay pool.
@@ -137,7 +137,7 @@ class DDPG(RLAlgorithm):
         :param scale_reward: The scaling factor applied to the rewards when training
         :param include_horizon_terminal_transitions: whether to include transitions with terminal=True because the
         horizon was reached. This might make the Q value back up less stable for certain tasks.
-        :param plot: Whether to visualize the policy performance after each eval_interval.
+        :param plot: Whether to visualize the policy performance after each train_epoch_interval.
         :param pause_for_plot: Whether to pause before continuing when plotting.
         :return:
         """
@@ -146,8 +146,7 @@ class DDPG(RLAlgorithm):
         self.qf = qf
         self.es = es
         self.batch_size = batch_size
-        self.n_epochs = n_epochs
-        self.epoch_length = epoch_length
+        self.n_steps = n_steps
         self.min_pool_size = min_pool_size
         self.replay_pool_size = replay_pool_size
         self.discount = discount
@@ -159,6 +158,7 @@ class DDPG(RLAlgorithm):
                 learning_rate=qf_learning_rate,
             )
         self.qf_learning_rate = qf_learning_rate
+        self.train_epoch_interval = train_epoch_interval
         self.policy_weight_decay = policy_weight_decay
         self.policy_update_method = \
             parse_update_method(
@@ -194,7 +194,7 @@ class DDPG(RLAlgorithm):
     def train(self):
         # This seems like a rather sequential method
         pool = SimpleReplayPool(
-            max_pool_size=self.replay_pool_size,
+            max_pool_size=int(self.replay_pool_size),
             observation_dim=self.env.observation_space.flat_dim,
             action_dim=self.env.action_space.flat_dim,
         )
@@ -205,22 +205,21 @@ class DDPG(RLAlgorithm):
         path_length = 0
         path_return = 0
         terminal = False
-        # observation = self.env.reset()
+        observation = self.env.reset()
 
         sample_policy = pickle.loads(pickle.dumps(self.policy))
-        print("Train start!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
-        for epoch in range(self.n_epochs):
-            logger.push_prefix('epoch #%d | ' % epoch)
+        train_epoch = 0
+
+        while train_epoch * self.train_epoch_interval < self.n_steps:
+            logger.push_prefix('step #%d | ' % (train_epoch * self.train_epoch_interval))
             logger.log("Training started")
-            observation=self.env.reset()
-            for epoch_itr in pyprind.prog_bar(range(self.epoch_length)):
+            for train_epoch_step in pyprind.prog_bar(range(self.train_epoch_interval)):
                 # Execute policy
-                if terminal:  # or path_length > self.max_path_length:
+                if terminal or path_length > self.max_path_length:
                     # Note that if the last time step ends an episode, the very
                     # last state and observation will be ignored and not added
                     # to the replay pool
-                    print("Env reset!!!!!!!!!!!!!!!!!!!")
                     observation = self.env.reset()
                     self.es.reset()
                     sample_policy.reset()
@@ -229,23 +228,17 @@ class DDPG(RLAlgorithm):
                     path_return = 0
                 action = self.es.get_action(itr, observation, policy=sample_policy)  # qf=qf)
 
-                print("terminal: ", terminal)
-
                 next_observation, reward, terminal, _ = self.env.step(action)
-                print(action)
-                print(reward)
-                print("env.step terminal: ", terminal)
                 path_length += 1
                 path_return += reward
-                print(path_length)
-                print(self.max_path_length)
-                if not terminal and path_length >= self.max_path_length:
-                    terminal = True
-                    # only include the terminal transition in this case if the flag was set
-                    if self.include_horizon_terminal_transitions:
-                        pool.add_sample(observation, action, reward * self.scale_reward, terminal)
-                else:
-                    pool.add_sample(observation, action, reward * self.scale_reward, terminal)
+
+                # if not terminal and path_length >= self.max_path_length:
+                #     terminal = True
+                #     # only include the terminal transition in this case if the flag was set
+                #     if self.include_horizon_terminal_transitions:
+                #         pool.add_sample(observation, action, reward * self.scale_reward, terminal)
+                # else:
+                pool.add_sample(observation,action,reward,terminal)
 
                 observation = next_observation
 
@@ -260,16 +253,19 @@ class DDPG(RLAlgorithm):
 
             logger.log("Training finished")
             if pool.size >= self.min_pool_size:
-                self.evaluate(epoch, pool)
-                params = self.get_epoch_snapshot(epoch)
-                logger.save_itr_params(epoch, params)
+                self.evaluate(train_epoch * self.train_epoch_interval, pool)
+                if self.eval_samples > 0:  # we performed rollout!
+                    observation = self.env.reset()
+                params = self.get_epoch_snapshot(train_epoch * self.train_epoch_interval)
+                logger.save_itr_params(train_epoch * self.train_epoch_interval, params)
             logger.dump_tabular(with_prefix=False)
             logger.pop_prefix()
+            train_epoch += 1
             if self.plot:
                 self.update_plot()
                 if self.pause_for_plot:
                     input("Plotting evaluation run: Press Enter to "
-                              "continue...")
+                          "continue...")
         self.env.terminate()
         self.policy.terminate()
 
@@ -403,7 +399,7 @@ class DDPG(RLAlgorithm):
             self.qf.get_param_values(regularizable=True)
         )
 
-        logger.record_tabular('Epoch', epoch)
+        logger.record_tabular('transitions', epoch)
         logger.record_tabular('AverageReturn',
                               np.mean(returns))
         logger.record_tabular('StdReturn',

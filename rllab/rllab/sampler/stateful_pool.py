@@ -1,6 +1,6 @@
 
 
-from joblib.pool import MemmappingPool
+from joblib.pool import MemmapingPool
 import multiprocessing as mp
 from rllab.misc import logger
 import pyprind
@@ -56,7 +56,7 @@ class StatefulPool(object):
         if n_parallel > 1:
             self.queue = mp.Queue()
             self.worker_queue = mp.Queue()
-            self.pool = MemmappingPool(
+            self.pool = MemmapingPool(
                 self.n_parallel,
                 temp_folder="/tmp",
             )

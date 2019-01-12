@@ -1,4 +1,4 @@
-from rllab.envs.box2d.cartpole_env import CartpoleEnv
+from rllab.envs.gym_env import GymEnv
 from rllab.policies.gaussian_mlp_policy import GaussianMLPPolicy
 from rllab.envs.normalized_env import normalize
 import numpy as np
@@ -8,14 +8,14 @@ from lasagne.updates import adam
 
 # normalize() makes sure that the actions for the environment lies
 # within the range [-1, 1] (only works for environments with continuous actions)
-env = normalize(CartpoleEnv())
+env = normalize(GymEnv(env_name = "LunarLanderContinuous-v2"))
 # Initialize a neural network policy with a single hidden layer of 8 hidden units
 policy = GaussianMLPPolicy(env.spec, hidden_sizes=(8,))
 
 # We will collect 100 trajectories per iteration
-N = 100
+N = 3
 # Each trajectory will have at most 100 time steps
-T = 100
+T = 200
 # Number of iterations
 n_itr = 100
 # Set the discount factor for the problem
