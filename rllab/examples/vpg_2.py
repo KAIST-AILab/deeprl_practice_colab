@@ -1,5 +1,5 @@
 
-from rllab.envs.box2d.cartpole_env import CartpoleEnv
+from rllab.envs.gym_env import GymEnv
 from rllab.baselines.linear_feature_baseline import LinearFeatureBaseline
 from rllab.policies.gaussian_mlp_policy import GaussianMLPPolicy
 from rllab.envs.normalized_env import normalize
@@ -10,7 +10,7 @@ from lasagne.updates import adam
 
 # normalize() makes sure that the actions for the environment lies
 # within the range [-1, 1] (only works for environments with continuous actions)
-env = normalize(CartpoleEnv())
+env = normalize(GymEnv('LunarLanderContinuous-v2'))
 # Initialize a neural network policy with a single hidden layer of 8 hidden units
 policy = GaussianMLPPolicy(env.spec, hidden_sizes=(8,))
 # Initialize a linear baseline estimator using default hand-crafted features

@@ -12,7 +12,6 @@ import numpy as np
 import pyprind
 import lasagne
 
-
 def parse_update_method(update_method, **kwargs):
     if update_method == 'adam':
         return partial(lasagne.updates.adam, **ext.compact(kwargs))
@@ -238,8 +237,11 @@ class DDPG(RLAlgorithm):
                 #     if self.include_horizon_terminal_transitions:
                 #         pool.add_sample(observation, action, reward * self.scale_reward, terminal)
                 # else:
-                pool.add_sample(observation,action,reward,terminal)
-
+                # pool.add_sample(observation,action,reward,terminal)
+                pool.add_sample(self.env.observation_space.flatten(observation),
+                                self.env.action_space.flatten(action),
+                                reward,
+                                terminal)
                 observation = next_observation
 
                 if pool.size >= self.min_pool_size:
@@ -369,7 +371,7 @@ class DDPG(RLAlgorithm):
         self.q_averages.append(qval)
         self.y_averages.append(ys)
 
-    def evaluate(self, epoch, pool):
+    def evaluate(self, steps, pool):
         logger.log("Collecting samples for evaluation")
         paths = parallel_sampler.sample_paths(
             policy_params=self.policy.get_param_values(),
@@ -399,40 +401,31 @@ class DDPG(RLAlgorithm):
             self.qf.get_param_values(regularizable=True)
         )
 
-        logger.record_tabular('transitions', epoch) ######
+        logger.record_tabular('steps', steps)
         logger.record_tabular('AverageReturn',
-                              np.mean(returns)) #####
+                              np.mean(returns))
         logger.record_tabular('StdReturn',
-                              np.std(returns)) ####
+                              np.std(returns))
         logger.record_tabular('MaxReturn',
-                              np.max(returns)) ####
+                              np.max(returns))
         logger.record_tabular('MinReturn',
-                              np.min(returns))  ####
-        # if len(self.es_path_returns) > 0:
-        #     logger.record_tabular('AverageEsReturn',
-        #                           np.mean(self.es_path_returns))
-        #     logger.record_tabular('StdEsReturn',
-        #                           np.std(self.es_path_returns))
-        #     logger.record_tabular('MaxEsReturn',
-        #                           np.max(self.es_path_returns))
-        #     logger.record_tabular('MinEsReturn',
-        #                           np.min(self.es_path_returns))
+                              np.min(returns))
         logger.record_tabular('AverageDiscountedReturn',
-                              average_discounted_return) ##########
-        logger.record_tabular('AverageQLoss', average_q_loss)     ######3
-        logger.record_tabular('AveragePolicySurr', average_policy_surr) ###########
-        logger.record_tabular('AverageQ', np.mean(all_qs)) ###########
-        logger.record_tabular('AverageAbsQ', np.mean(np.abs(all_qs))) ##########3
-        logger.record_tabular('AverageY', np.mean(all_ys)) #############3
-        logger.record_tabular('AverageAbsY', np.mean(np.abs(all_ys))) ###########
+                              average_discounted_return)
+        logger.record_tabular('AverageQLoss', average_q_loss)
+        logger.record_tabular('AveragePolicySurr', average_policy_surr)
+        logger.record_tabular('AverageQ', np.mean(all_qs))
+        logger.record_tabular('AverageAbsQ', np.mean(np.abs(all_qs)))
+        logger.record_tabular('AverageY', np.mean(all_ys))
+        logger.record_tabular('AverageAbsY', np.mean(np.abs(all_ys)))
         logger.record_tabular('AverageAbsQYDiff',
-                              np.mean(np.abs(all_qs - all_ys))) ###########33
-        logger.record_tabular('AverageAction', average_action) ###########3
+                              np.mean(np.abs(all_qs - all_ys)))
+        logger.record_tabular('AverageAction', average_action)
 
         logger.record_tabular('PolicyRegParamNorm',
-                              policy_reg_param_norm) ###########33
+                              policy_reg_param_norm)
         logger.record_tabular('QFunRegParamNorm',
-                              qfun_reg_param_norm) ###########3
+                              qfun_reg_param_norm)
 
         self.env.log_diagnostics(paths)
         self.policy.log_diagnostics(paths)

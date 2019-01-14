@@ -13,7 +13,7 @@ env = normalize(GymEnv(env_name = "LunarLanderContinuous-v2"))
 policy = GaussianMLPPolicy(env.spec, hidden_sizes=(8,))
 
 # We will collect 100 trajectories per iteration
-N = 3
+N = 100
 # Each trajectory will have at most 100 time steps
 T = 200
 # Number of iterations

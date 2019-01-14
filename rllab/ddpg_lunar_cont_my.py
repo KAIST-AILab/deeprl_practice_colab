@@ -4,6 +4,7 @@ from rllab.envs.normalized_env import normalize
 from rllab.misc.instrument import run_experiment_lite
 from rllab.exploration_strategies.ou_strategy import OUStrategy
 from rllab.policies.deterministic_mlp_policy import DeterministicMLPPolicy
+from rllab.policies.categorical_mlp_policy import CategoricalMLPPolicy
 from rllab.q_functions.continuous_mlp_q_function import ContinuousMLPQFunction
 
 
@@ -23,6 +24,7 @@ def run_task(*_):
         hidden_sizes=(128, 128)
     )
 
+
     es = OUStrategy(env_spec=env.spec)
 
     qf = ContinuousMLPQFunction(env_spec=env.spec,
@@ -34,17 +36,17 @@ def run_task(*_):
         policy=policy,
         es=es,
         qf=qf,
-        batch_size=64,
-        n_updates_per_sample = 3,
+        batch_size=256,
         max_path_length=max_path_length,
-        epoch_length=1000,
-        min_pool_size=150,
-        replay_pool_size = 5000,
-        n_epochs=2000,
+        epoch_length=300,
+        min_pool_size=290,
+        replay_pool_size = 7000,
+        n_updates_per_sample =1,
+        n_epochs = 3000,
         discount=0.99,
         scale_reward=0.1,
-        qf_learning_rate=3e-3,
-        policy_learning_rate=3e-4,
+        qf_learning_rate=1e-3,
+        policy_learning_rate=1e-4,
         # Uncomment both lines (this and the plot parameter below) to enable plotting
         # plot=True,
     )
@@ -54,7 +56,7 @@ def run_task(*_):
 run_experiment_lite(
     run_task,
     # Number of parallel workers for sampling
-    log_dir='./log/ddpg_lunar',
+    log_dir='./log/ddpg_mntcar_cont',
     n_parallel=1,
     # Only keep the snapshot parameters for the last iteration
     snapshot_mode="last",
