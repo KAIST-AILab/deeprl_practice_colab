@@ -1,0 +1,21 @@
+$ cd .../rllab/scripts
+$ rllab/scripts $ ./setup_mujoco.sh 
+# Enter the path to mjpro131_linux.zip which is: ../vendor/mujoco/mjpro131_linux.zip
+# Enter the path to the lisence key which is: ../vendor/mujoco/mjkey.txt
+
+# Test if Mujoco is installed in a correct way:
+$ cd .../rllab/examples 
+.../rllab/examples $ cp trpo_swimmer.py ../trpo_swimmer.py
+.../rllab/examples $ cd ..
+.../rllab $
+
+# change the default of one of the inputs of the rollout() method named "animated" to True 
+# open .../rllab/rllab/sampler/utils.py
+# change the default value of the input here and save
+
+# Run the example code that trains TRPO agent in the Swimmer environment of Mujoco
+# You should see the animation of the agent moving around (Its early training stage, so it wouldn't move much)
+.../rllab $ python trpo_swimmer.py  
+
+
+
