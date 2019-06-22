@@ -3,18 +3,17 @@
 ## Day 1: Value-Based RL
 - 실습 교육 내용:
     - DQN
-- 실습 내용 (못하면 숙제):
+- 실습 내용:
     1. Prioritized Experience Replay (DQN+) [[Schaul et al. ICLR 2016]](https://arxiv.org/pdf/1511.05952.pdf)
     2. Dueling
 network architectures for deep reinforcement learning (DQN++) [[Wang et al. ICML 2016]](http://proceedings.mlr.press/v48/wangf16.pdf)
 
 ## Day 2: Policy-Based RL
 - 실습 교육 내용:
-    - Trust region policy optimization (TRPO) [[Schulman et al. ICML 2015]](http://proceedings.mlr.press/v37/sch제ulman15.pdf)
-    
-    - REINFORCE, DDPG
-- 실습 내용 (못하면 숙제):
-    - Proximal Policy Optimization (PPO) [[Schulman et al. Arxiv 2017]](https://arxiv.org/pdf/1707.06347.pdf)
+    1. REINFORCE
+    2. Vanilla Policy Gradient (VPG) in the RLLAB library
+- 실습 내용:
+    - Deep Deterministic Policy Gradient (DDPG) [[Lillicrap et al. ICLR 2016]](https://arxiv.org/pdf/1509.02971.pdf)
     
     -REINFORCE (직접 코딩-구멍뚫고 문제 만들기 좋음), DDPG(있는 코드 활용, OU/Gaussian exploration strategy 바꿔가면서 실험 &구멍뚫고 문제 만들기)할까 생각중
      
