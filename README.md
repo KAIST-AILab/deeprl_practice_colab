@@ -14,40 +14,13 @@ network architectures for deep reinforcement learning (DQN++) [[Wang et al. ICML
     2. Vanilla Policy Gradient (VPG) in the RLLAB library
 - 실습 내용:
     - Deep Deterministic Policy Gradient (DDPG) [[Lillicrap et al. ICLR 2016]](https://arxiv.org/pdf/1509.02971.pdf)
-    
-    -REINFORCE (직접 코딩-구멍뚫고 문제 만들기 좋음), DDPG(있는 코드 활용, OU/Gaussian exploration strategy 바꿔가면서 실험 &구멍뚫고 문제 만들기)할까 생각중
      
 ## Day 3: Transfer Learning
 - 실습 교육 내용:
-    - Model-Agnostic Meta-Learning (MAML) [[Finn et al. ICML 2017]](https://arxiv.org/pdf/1703.03400.pdf)
-- 실습 내용 (못하면 숙제):
-    -  Tensorflow로 구현된 MAML을 Theano로 구현.
-    
-    -MAML은  RL algorithm이라기 보다는 gradient-based optimization을 사용하는 모델들에서의 transfer learning algorithm이라고 보는 것이 맞음... GAIL 실습하는게 더 나아 보임...저자코드 사용해서. 구멍 뚫고 문제 만들 곳이 reward학습하는 곳과, policy 학습하는 곳. 학습하는데 시간이 좀 걸릴 것으로 보임.
-
-
-## Mujoco Local Installation
-```bash
-# Files required for your installation should be located at .../rllab/vendor/mujoco
-# File names: libglfw.so.3, libmujoco131.so, mjkey.txt, mjpro131_linux.zip
-# Except the lisence key (mjkey.txt), it is all included in our repository
-# Place your lisence key in .../rllab/vendor/mujoco
-# And follow the installation guide below
-
-$ cd .../rllab/scripts
-$ rllab/scripts $ ./setup_mujoco.sh 
-# Enter the path to mjpro131_linux.zip which is: ../vendor/mujoco/mjpro131_linux.zip
-# Enter the path to the lisence key which is: ../vendor/mujoco/mjkey.txt
-
-# Test if Mujoco is installed in a correct way:
-$ cd .../rllab/examples 
-.../rllab/examples $ cp trpo_swimmer.py ../trpo_swimmer.py
-.../rllab/examples $ cd ..
-.../rllab $
-
-# change the default of one of the inputs of the rollout() method named "animated" to True 
-# open .../rllab/rllab/sampler/utils.py
-# change the default value of the input here and save
+    - Generative Adversarial Imitation Learning (GAIL) [[Ho et al. NIPS 2016]](https://arxiv.org/abs/1606.03476)
+- 실습 내용:
+    -  Hyperparameter 조절해가면서 직접 실험.
+    ault value of the input here and save
 
 # Run the example code that trains TRPO agent in the Swimmer environment of Mujoco
 # You should see the animation of the agent moving around (Its early training stage, so it wouldn't move much)
